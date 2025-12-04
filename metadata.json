@@ -1,0 +1,5 @@
+{
+  "name": "Derma-AI",
+  "description": "A personalized virtual esthetician that analyzes skin profiles and generates product-neutral skincare routines.",
+  "requestFramePermissions": []
+}
