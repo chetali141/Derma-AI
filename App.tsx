@@ -25,6 +25,16 @@ function App() {
     }
   };
 
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+    const target = e.currentTarget;
+    target.style.display = 'none';
+    if (target.parentElement) {
+        target.parentElement.classList.add('bg-stone-200');
+        target.parentElement.classList.remove('bg-stone-100');
+        // Add a fallback icon or text if needed via CSS, or just keep it as a colored placeholder
+    }
+  };
+
   const renderContent = () => {
     switch (view) {
       case AppView.WELCOME:
@@ -78,11 +88,15 @@ function App() {
             {/* Right Image */}
             <div className="relative hidden lg:block h-[600px] w-full">
                 <div className="absolute inset-0 bg-stone-100 rounded-[3rem] rotate-3 transform transition-transform hover:rotate-2"></div>
-                <div className="absolute inset-0 rounded-[3rem] overflow-hidden shadow-2xl">
+                <div className="absolute inset-0 rounded-[3rem] overflow-hidden shadow-2xl bg-white">
                     <img 
-                        src="https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=2670&auto=format&fit=crop" 
+                        src="https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=1000&auto=format&fit=crop" 
                         alt="Skincare aesthetic" 
                         className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+                        onError={(e) => {
+                            // Fallback to a very reliable simple texture if the main one fails
+                            e.currentTarget.src = "https://images.unsplash.com/photo-1556228720-1957be979c22?q=80&w=1000&auto=format&fit=crop";
+                        }}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-stone-900/20 to-transparent"></div>
                 </div>
@@ -91,9 +105,20 @@ function App() {
                 <div className="absolute -bottom-6 -left-6 bg-white p-6 rounded-2xl shadow-xl max-w-xs animate-fade-in-up delay-300">
                     <div className="flex items-center gap-3 mb-2">
                         <div className="flex -space-x-2">
-                             {[1,2,3].map(i => (
+                             {[
+                               "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=100&auto=format&fit=crop",
+                               "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=100&auto=format&fit=crop",
+                               "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=100&auto=format&fit=crop"
+                             ].map((img, i) => (
                                  <div key={i} className="w-8 h-8 rounded-full bg-stone-200 border-2 border-white overflow-hidden">
-                                    <img src={`https://i.pravatar.cc/100?img=${i+25}`} alt="user" className="w-full h-full object-cover" />
+                                    <img 
+                                        src={img} 
+                                        alt="user" 
+                                        className="w-full h-full object-cover" 
+                                        onError={(e) => e.currentTarget.style.display = 'none'}
+                                    />
+                                    {/* Fallback colored circle if image fails */}
+                                    <div className="w-full h-full bg-stone-300"></div>
                                  </div>
                              ))}
                         </div>
@@ -128,11 +153,12 @@ function App() {
           <div className="space-y-12 animate-fade-in-up pb-12">
             {/* Summary Section */}
             <div className="bg-stone-900 rounded-[2.5rem] shadow-2xl shadow-stone-200 overflow-hidden relative text-white">
-              <div className="absolute inset-0">
+              <div className="absolute inset-0 bg-stone-800">
                 <img 
-                    src="https://images.unsplash.com/photo-1531685218-c523a8bd028d?q=80&w=2670&auto=format&fit=crop" 
+                    src="https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2570&auto=format&fit=crop" 
                     className="w-full h-full object-cover opacity-20 mix-blend-overlay"
                     alt="Background texture"
+                    onError={handleImageError}
                 />
                 <div className="absolute inset-0 bg-gradient-to-r from-stone-900 via-stone-900/90 to-transparent"></div>
               </div>
@@ -206,9 +232,10 @@ function App() {
                  {routine.weekly.length > 0 && (
                   <div className="bg-teal-900 rounded-3xl overflow-hidden p-8 text-white shadow-xl relative">
                     <img 
-                        src="https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2670&auto=format&fit=crop"
+                        src="https://images.unsplash.com/photo-1551884170-09fb70a3a2ed?q=80&w=2670&auto=format&fit=crop"
                         className="absolute inset-0 w-full h-full object-cover opacity-10 mix-blend-overlay"
                         alt="Water texture"
+                        onError={handleImageError}
                     />
                     <div className="absolute top-0 right-0 p-32 bg-teal-500 rounded-full blur-3xl opacity-20 -mr-16 -mt-16"></div>
                     
@@ -235,9 +262,10 @@ function App() {
                 <div className="relative overflow-hidden bg-[#FAF9F6] border border-stone-200 rounded-3xl p-6 text-center group">
                     <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                         <img 
-                            src="https://images.unsplash.com/photo-1490750967868-58cb75069ed6?q=80&w=800&auto=format&fit=crop" 
+                            src="https://images.unsplash.com/photo-1509664158680-07c5032b513a?q=80&w=800&auto=format&fit=crop" 
                             className="w-full h-full object-cover opacity-10"
                             alt="Texture"
+                            onError={handleImageError}
                         />
                     </div>
                     <div className="relative z-10">

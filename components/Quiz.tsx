@@ -25,6 +25,15 @@ const Quiz: React.FC<QuizProps> = ({ onSubmit }) => {
     }, 250);
   };
 
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+      const target = e.currentTarget;
+      target.style.display = 'none';
+      if (target.parentElement) {
+          target.parentElement.classList.add('bg-stone-200'); // Fallback color
+          target.parentElement.classList.remove('bg-stone-100');
+      }
+  };
+
   const renderQuestion = () => {
     switch (step) {
       case 1:
@@ -40,25 +49,29 @@ const Quiz: React.FC<QuizProps> = ({ onSubmit }) => {
                     label: "Tight & Rough", 
                     value: "Dry", 
                     desc: "Feels parched.", 
-                    img: "https://images.unsplash.com/photo-1508737352327-0201d4a047c5?q=80&w=800&auto=format&fit=crop" 
+                    // Soft cotton texture
+                    img: "https://images.unsplash.com/photo-1535591273668-578e31182c4f?q=80&w=600&auto=format&fit=crop" 
                 },
                 { 
                     label: "Oily All Over", 
                     value: "Oily", 
                     desc: "Visible shine.", 
-                    img: "https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=800&auto=format&fit=crop" 
+                    // Water/Wet texture
+                    img: "https://images.unsplash.com/photo-1519692933481-e162a57d6721?q=80&w=600&auto=format&fit=crop" 
                 },
                 { 
                     label: "Oily T-Zone", 
                     value: "Combination", 
                     desc: "Mixed feelings.", 
-                    img: "https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?q=80&w=800&auto=format&fit=crop" 
+                    // Leaf with dew
+                    img: "https://images.unsplash.com/photo-1509664158680-07c5032b513a?q=80&w=600&auto=format&fit=crop" 
                 },
                 { 
                     label: "Comfortable", 
                     value: "Normal", 
                     desc: "Just right.", 
-                    img: "https://images.unsplash.com/photo-1490750967868-58cb75069ed6?q=80&w=800&auto=format&fit=crop" 
+                    // Soft flower petals
+                    img: "https://images.unsplash.com/photo-1464695110811-dcf3903dc2f4?q=80&w=600&auto=format&fit=crop" 
                 },
               ].map((opt) => (
                 <button
@@ -70,11 +83,12 @@ const Quiz: React.FC<QuizProps> = ({ onSubmit }) => {
                     : 'border-stone-200 bg-white hover:border-teal-300'
                   }`}
                 >
-                  <div className="h-32 w-full overflow-hidden">
+                  <div className="h-32 w-full overflow-hidden bg-stone-100 relative">
                     <img 
                         src={opt.img} 
                         alt={opt.value} 
                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
+                        onError={handleImageError}
                     />
                   </div>
                   <div className="p-4">
@@ -102,12 +116,18 @@ const Quiz: React.FC<QuizProps> = ({ onSubmit }) => {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {[
-                { val: "Acne & Breakouts", img: "https://images.unsplash.com/photo-1596462502278-27bfdd403348?q=80&w=200&auto=format&fit=crop" },
-                { val: "Dryness & Dehydration", img: "https://images.unsplash.com/photo-1535591273668-578e31182c4f?q=80&w=200&auto=format&fit=crop" },
-                { val: "Fine Lines & Aging", img: "https://images.unsplash.com/photo-1512341689857-198e7e2f3ca8?q=80&w=200&auto=format&fit=crop" },
-                { val: "Redness & Sensitivity", img: "https://images.unsplash.com/photo-1549480017-d76466a4b7e8?q=80&w=200&auto=format&fit=crop" },
-                { val: "Dark Spots & Pigmentation", img: "https://images.unsplash.com/photo-1520186994231-6ea0019d8cc2?q=80&w=200&auto=format&fit=crop" },
-                { val: "Dullness & Texture", img: "https://images.unsplash.com/photo-1601049541289-9b1b75b1e560?q=80&w=200&auto=format&fit=crop" }
+                // Green leaf / Aloe
+                { val: "Acne & Breakouts", img: "https://images.unsplash.com/photo-1563227812-0ea4c22e6cc8?q=80&w=200&auto=format&fit=crop" },
+                // Cream texture
+                { val: "Dryness & Dehydration", img: "https://images.unsplash.com/photo-1608248597279-f99d160bfbc8?q=80&w=200&auto=format&fit=crop" },
+                // Dried flower / texture
+                { val: "Fine Lines & Aging", img: "https://images.unsplash.com/photo-1505576399279-565b52d4ac71?q=80&w=200&auto=format&fit=crop" },
+                // Pink petal
+                { val: "Redness & Sensitivity", img: "https://images.unsplash.com/photo-1469334031218-e382a71b716b?q=80&w=200&auto=format&fit=crop" },
+                // Fruit / Bright
+                { val: "Dark Spots & Pigmentation", img: "https://images.unsplash.com/photo-1490750967868-58cb75069ed6?q=80&w=200&auto=format&fit=crop" },
+                // Light / Bright
+                { val: "Dullness & Texture", img: "https://images.unsplash.com/photo-1577401239170-897942555fb3?q=80&w=200&auto=format&fit=crop" }
               ].map((item) => (
                 <button
                   key={item.val}
@@ -118,8 +138,13 @@ const Quiz: React.FC<QuizProps> = ({ onSubmit }) => {
                     : 'border-stone-100 bg-white hover:border-teal-200'
                   }`}
                 >
-                  <div className="w-16 h-16 rounded-xl overflow-hidden mr-4 flex-shrink-0">
-                      <img src={item.img} alt="" className="w-full h-full object-cover" />
+                  <div className="w-16 h-16 rounded-xl overflow-hidden mr-4 flex-shrink-0 bg-stone-100 relative">
+                      <img 
+                          src={item.img} 
+                          alt="" 
+                          className="w-full h-full object-cover" 
+                          onError={handleImageError}
+                      />
                   </div>
                   <div className="flex-1 text-left">
                      <span className={`font-medium text-lg block ${answers.concern === item.val ? 'text-teal-900' : 'text-stone-700'}`}>{item.val}</span>
